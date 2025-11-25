@@ -1,23 +1,22 @@
 import { createContext, useState, type ReactNode } from "react";
 import type UsuarioLogin from "../models/UsuarioLogin";
-import { login } from "../services/service";
+import { login } from "../services/Service";
+import { ToastAlerta } from "../utils/ToastAlerta";
 
-
-
-interface AuthContextProps {
+interface AuthContextProps{
     usuario: UsuarioLogin
-    handleLogout(): void
+    handleLogout(): void 
     handleLogin(usuario: UsuarioLogin): Promise<void>
     isLoading: boolean
 }
 
-interface AuthProviderProps {
+interface AuthProviderProps{
     children: ReactNode
 }
 
 export const AuthContext = createContext({} as AuthContextProps)
 
-export function AuthProvider({ children }: AuthProviderProps) {
+export function AuthProvider({ children }: AuthProviderProps){
 
     // Inicializando o Estado usuario (Guardar os dados do usuário autenticado)
     const [usuario, setUsuario] = useState<UsuarioLogin>({
@@ -33,21 +32,21 @@ export function AuthProvider({ children }: AuthProviderProps) {
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
     // Implementação da Função de login (Autenticação no Backend)
-    async function handleLogin(usuarioLogin: UsuarioLogin) {
+    async function handleLogin(usuarioLogin: UsuarioLogin){
         setIsLoading(true);
 
-        try {
+        try{
             await login(`/usuarios/logar`, usuarioLogin, setUsuario);
-            alert("Usuário autenticado com sucesso!");
-        } catch (error) {
-            alert("Os dados do usuários estão inconsistentes!")
+            ToastAlerta("Usuário autenticado com sucesso!", "sucesso");
+        }catch(error){
+            ToastAlerta("Os dados do usuários estão inconsistentes!", "erro")
         }
 
         setIsLoading(false);
     }
 
     // Implementação da Função de logout (desconectar o usuário)
-    function handleLogout() {
+    function handleLogout(){
         setUsuario({
             id: 0,
             nome: "",
@@ -58,7 +57,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         });
     }
 
-    return (
+    return(
         <AuthContext.Provider value={{ usuario, handleLogin, handleLogout, isLoading }}>
             {children}
         </AuthContext.Provider>

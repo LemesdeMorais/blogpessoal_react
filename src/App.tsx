@@ -1,19 +1,26 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, Route, Routes } from "react-router-dom"
+import { ToastContainer } from "react-toastify"
+import 'react-toastify/dist/ReactToastify.css'
+import { AuthProvider } from "./contexts/AuthContext"
+import Cadastro from "./pages/cadastro/Cadastro"
 import Home from "./pages/home/Home"
-import Login from './pages/login/Login'
-import Cadastro from './pages/cadastro/Cadastro'
-import { AuthProvider } from './contexts/AuthContext'
-import Footer from './componentes/footer/Footer'
-import Navbar from './componentes/navbar/Navbar'
-import ListaTemas from './componentes/tema/listatema/ListaTema'
-import FormTema from './componentes/tema/formtema/FormTema'
-import DeletarTema from './componentes/tema/deletartema/DeletarTema'
-
+import Login from "./pages/login/Login"
+import AtualizarPerfil from "./pages/perfil/AtualizarPerfil"
+import Perfil from "./pages/perfil/Perfil"
+import Navbar from "./componentes/navbar/Navbar"
+import Footer from "./componentes/footer/Footer"
+import DeletarPostagem from "./componentes/postagem/deletarpostagem/DeletarPostagem"
+import FormPostagem from "./componentes/postagem/formpostagem/FormPostagem"
+import ListaPostagens from "./componentes/postagem/listapostagem/ListaPostagem"
+import DeletarTema from "./componentes/tema/deletartema/DeletarTema"
+import FormTema from "./componentes/tema/formtema/FormTema"
+import ListaTemas from "./componentes/tema/listatema/ListaTema"
 
 function App() {
   return (
     <>
       <AuthProvider>
+        <ToastContainer />
         <BrowserRouter>
           <Navbar />
           <div className="min-h-[80vh]">
@@ -25,6 +32,12 @@ function App() {
               <Route path="/cadastrartema" element={<FormTema />} />
               <Route path="/editartema/:id" element={<FormTema />} />
               <Route path="/deletartema/:id" element={<DeletarTema />} />
+              <Route path="/postagens" element={<ListaPostagens />} />
+              <Route path="/cadastrarpostagem" element={<FormPostagem />} />
+              <Route path="/editarpostagem/:id" element={<FormPostagem />} />
+              <Route path="/deletarpostagem/:id" element={<DeletarPostagem />} />
+              <Route path="/perfil" element={<Perfil />} />
+              <Route path="/atualizarusuario" element={<AtualizarPerfil />} />
             </Routes>
           </div>
           <Footer />
@@ -35,4 +48,3 @@ function App() {
 }
 
 export default App
-

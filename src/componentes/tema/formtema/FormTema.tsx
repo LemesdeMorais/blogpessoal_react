@@ -3,7 +3,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { AuthContext } from "../../../contexts/AuthContext";
 import type Tema from "../../../models/Tema";
 import { ClipLoader } from "react-spinners";
-import { buscar, cadastrar } from "../../../services/service";
+import { ToastAlerta } from "../../../utils/ToastAlerta";
+import { buscar, cadastrar } from "../../../services/Service";
 
 function FormTema() {
 
@@ -41,7 +42,7 @@ function FormTema() {
 
     useEffect(() => {
         if (token === '') {
-            alert('Você precisa estar logado!');
+            ToastAlerta('Você precisa estar logado!', "info");
             navigate('/')
         }
     }, [token])
@@ -73,13 +74,13 @@ function FormTema() {
                 await cadastrar('/temas', tema, setTema, {
                     headers: { Authorization: token }
                 })
-                alert('O Tema foi cadastrado com sucesso!');
+                ToastAlerta('O Tema foi cadastrado com sucesso!', "sucesso");
 
             } catch (error: any) {
                 if (error.toString().includes('401')) {
                     handleLogout();
                 } else {
-                    alert('Erro ao cadastrar o tema!')
+                    ToastAlerta('Erro ao cadastrar o tema!', "erro")
                 }
             }
 

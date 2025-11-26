@@ -3,8 +3,10 @@ import CardTema from "../cardtema/CardTema";
 import { useContext, useEffect, useState } from "react";
 import type Tema from "../../../models/Tema";
 import { AuthContext } from "../../../contexts/AuthContext";
-import { buscar } from "../../../services/service";
+
 import { SyncLoader } from "react-spinners";
+import { ToastAlerta } from "../../../utils/ToastAlerta";
+import { buscar } from "../../../services/Service";
 
 
 function ListaTemas() {
@@ -20,7 +22,7 @@ function ListaTemas() {
 
     useEffect(() => {
         if (token === '') {
-            alert('Você precisa estar logado!');
+            ToastAlerta('Você precisa estar logado!', "info");
             navigate('/')
         }
     }, [token])

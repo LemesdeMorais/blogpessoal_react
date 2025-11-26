@@ -1,31 +1,26 @@
-import { useNavigate, useParams } from "react-router-dom";
-import type Tema from "../../../models/Tema";
 import { useContext, useEffect, useState } from "react";
-import { buscar, deletar } from "../../../services/service";
+import { useNavigate, useParams } from "react-router-dom";
 import { AuthContext } from "../../../contexts/AuthContext";
+import type Tema from "../../../models/Tema";
+import { buscar, deletar } from "../../../services/Service";
 import { ClipLoader } from "react-spinners";
+import { ToastAlerta } from "../../../utils/ToastAlerta";
 
 function DeletarTema() {
-
     const navigate = useNavigate();
-
     const [isLoading, setIsLoading] = useState<boolean>(false);
-
     const [tema, setTema] = useState<Tema>({} as Tema);
-
     const { usuario, handleLogout } = useContext(AuthContext);
     const token = usuario.token;
-
     const { id } = useParams<{ id: string }>();
 
     async function buscarTemaPorId() {
         try {
-            await buscar('/temas', setTema, {
+            await buscar(`/temas/${id}`, setTema, {
                 headers: { Authorization: token }
-            })
-
+            });
         } catch (error: any) {
-            if (error.toString().include('401')) {
+            if (error.toString().includes('401')) {
                 handleLogout();
             }
         }
@@ -35,16 +30,14 @@ function DeletarTema() {
         if (id !== undefined) {
             buscarTemaPorId();
         }
-
-    }, [id])
-
+    }, [id]);
 
     useEffect(() => {
         if (token === '') {
-            alert('Você precisa estar logado!');
-            navigate('/')
+            ToastAlerta('Você precisa estar logado.', "info");
+            navigate('/');
         }
-    }, [token])
+    }, [token]);
 
     function retornar() {
         navigate("/temas");
@@ -52,19 +45,16 @@ function DeletarTema() {
 
     async function deletarTema() {
         setIsLoading(true);
-
         try {
-
             await deletar(`/temas/${id}`, {
                 headers: { Authorization: token }
-            })
-            alert('Tema deletado com sucesso! ')
-
+            });
+            ToastAlerta('Tema deletado com sucesso.', "sucesso");
         } catch (error: any) {
             if (error.toString().includes('401')) {
                 handleLogout();
             } else {
-                alert('Erro ao deletar o tema!')
+                ToastAlerta('Erro ao deletar o tema!', "erro");
             }
         }
 
@@ -80,19 +70,14 @@ function DeletarTema() {
                 <header className="py-2 px-6 bg-indigo-600 text-white font-bold text-2xl">Tema</header>
                 <p className="p-8 text-3xl bg-slate-200 h-full">{tema.descricao}</p>
                 <div className="flex">
-                    <button className="text-slate-100 bg-red-400 hover:bg-red-600 w-full py-2"
-                        onClick={retornar}
-                    >Não</button>
-                    <button className="w-full text-slate-100 bg-indigo-400 hover:bg-indigo-600 flex items-center justify-center"
-                        onClick={deletarTema}
-                    >
+                    <button className="text-slate-100 bg-red-400 hover:bg-red-600 w-full py-2" onClick={retornar}>Não</button>
+                    <button className="w-full text-slate-100 bg-indigo-400 hover:bg-indigo-600 flex items-center justify-center" onClick={deletarTema}>
                         {
                             isLoading ?
                                 <ClipLoader
                                     color="#ffffff"
                                     size={24}
-                                />
-                                :
+                                /> :
                                 <span>Sim</span>
                         }
                     </button>
@@ -103,4 +88,3 @@ function DeletarTema() {
 }
 
 export default DeletarTema
-

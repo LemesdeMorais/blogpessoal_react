@@ -101,7 +101,7 @@ function AtualizarPerfil() {
                 }
             }
         } else {
-            ToastAlerta("Dados inconsistentes. Verifique as informações do usuário.", "erro")
+            ToastAlerta("Dados inconsistentes. Verifique as informações do usuário.", "info")
             setUser({ ...user, senha: "" })
             setConfirmarSenha("")
         }
